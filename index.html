@@ -257,20 +257,101 @@
       <!-- Equipo -->
       <section id="equipo" class="section grey fade-up delay-5">
         <h2><i class="fa-solid fa-users"></i> Nuestro Equipo</h2>
-        <img
-          src="https://elobjetivo.com.ar/download/multimedia.normal.83e957b4a72254d4.45717569706f5f6e6f726d616c2e6a7067.jpg"
-          alt="Equipo desarrollador"
-          class="section-img"
-        />
-        <ul class="team-list">
-          <li>Rodrigo Ostin Choquecallata</li>
-          <li>Josue Flores Vargas</li>
-          <li>Pamela Gareca Perez</li>
-          <li>Amely Alizon Lopez Lopez</li>
-          <li>Erland Jimmy Martinez Chambi</li>
-          <li>Juan Carlos Poma Mujica</li>
-        </ul>
+        <div class="team-cards">
+          <!-- Miembro 1 -->
+          <div class="team-card">
+            <img
+              src="https://i.pravatar.cc/200?img=47"
+              alt="Amely"
+              class="avatar"
+            />
+            <h3>Amely Alizon Lopez Lopez</h3>
+            <a
+              href="https://wa.me/591XXXXXXXXX"
+              target="_blank"
+              class="whatsapp-btn"
+            >
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+
+          <!-- Miembro 2 -->
+          <div class="team-card">
+            <img
+              src="https://i.pravatar.cc/200?img=12"
+              alt="Juan Carlos"
+              class="avatar"
+            />
+            <h3>Juan Carlos Poma Mujica</h3>
+            <a
+              href="https://wa.me/591XXXXXXXXX"
+              target="_blank"
+              class="whatsapp-btn"
+            >
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
       </section>
+
+      <style>
+        .team-cards {
+          display: flex;
+          gap: 20px;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-top: 20px;
+        }
+
+        .team-card {
+          background: #fff;
+          border-radius: 15px;
+          padding: 20px;
+          width: 250px;
+          text-align: center;
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .team-card .avatar {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          margin-bottom: 15px;
+          object-fit: cover;
+          border: 3px solid #25d366;
+        }
+
+        .team-card h3 {
+          font-size: 18px;
+          margin-bottom: 10px;
+          color: #333;
+        }
+
+        .whatsapp-btn {
+          display: inline-block;
+          background: #25d366;
+          color: #fff;
+          padding: 8px 15px;
+          border-radius: 8px;
+          text-decoration: none;
+          font-size: 14px;
+          transition: background 0.3s ease;
+        }
+
+        .whatsapp-btn i {
+          margin-right: 5px;
+        }
+
+        .whatsapp-btn:hover {
+          background: #1ebe57;
+        }
+      </style>
 
       <!-- Contacto -->
       <section id="contacto" class="section fade-up delay-6">
@@ -302,3 +383,4 @@
     <script src="script.js"></script>
   </body>
 </html>
+
