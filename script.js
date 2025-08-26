@@ -23,9 +23,8 @@ document.querySelectorAll(".fade-up, .fade-in").forEach((el) => {
 const form = document.getElementById("formulario");
 const formMessage = document.getElementById("form-message");
 
-// Tu URL del Apps Script (el que me pasaste)
-const scriptURL =
-  "https://script.google.com/macros/s/AKfycbxILcaPlTkwgYG-skx7zRUNxhwXEkPBUEwX2_4pE47s50jI9FtbovfAhHl7fKk5Tq5Btw/exec";
+// Reemplaza por la URL de tu Web App desplegado
+const scriptURL = "https://script.google.com/macros/s/AKfycbxILcaPlTkwgYG-skx7zRUNxhwXEkPBUEwX2_4pE47s50jI9FtbovfAhHl7fKk5Tq5Btw/exec";
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -39,36 +38,33 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  // Validación básica email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     formMessage.textContent = "⚠️ Ingresa un correo válido.";
     return;
   }
 
-  // Enviar datos al Google Sheet con JSON
   fetch(scriptURL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" }, // 👈 añadido
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nombre, email, mensaje }),
   })
-    .then((response) => {
-      if (response.ok) {
+    .then(response => response.json())
+    .then(data => {
+      if (data.result === "success") {
         formMessage.style.color = "#4CAF50";
         formMessage.textContent = "✅ Mensaje enviado con éxito!";
         form.reset();
       } else {
-        throw new Error("Error en la respuesta del servidor");
+        throw new Error(data.message);
       }
     })
-    .catch((error) => {
+    .catch(error => {
       formMessage.style.color = "red";
-      formMessage.textContent =
-        "❌ Error al enviar. Intente nuevamente más tarde.";
+      formMessage.textContent = "❌ Error al enviar. Intente nuevamente más tarde.";
       console.error("Error:", error);
     });
 
-  // Limpiar mensaje después de 4 segundos
   setTimeout(() => {
     formMessage.textContent = "";
     formMessage.style.color = "#ff7e00";
