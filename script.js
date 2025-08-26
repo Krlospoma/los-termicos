@@ -1,5 +1,4 @@
 // Animar secciones al hacer scroll usando Intersection Observer
-
 const observerOptions = {
   threshold: 0.1,
 };
@@ -18,10 +17,15 @@ document.querySelectorAll(".fade-up, .fade-in").forEach((el) => {
   observer.observe(el);
 });
 
-// Formulario simple con validación y mensaje
-
+// =====================
+// Formulario con Google Sheets
+// =====================
 const form = document.getElementById("formulario");
 const formMessage = document.getElementById("form-message");
+
+// Tu URL del Apps Script (el que me pasaste)
+const scriptURL =
+  "https://script.google.com/macros/s/AKfycbxZSIwfO-QLUUXRcbH0BJ9RV-YSJB8uB9KOkhJg2vcM5c-q0XL0yhY1jtURKdUbhltv/exec";
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -31,22 +35,38 @@ form.addEventListener("submit", (e) => {
   const mensaje = form.mensaje.value.trim();
 
   if (!nombre || !email || !mensaje) {
-    formMessage.textContent = "Por favor, completa todos los campos.";
+    formMessage.textContent = "⚠️ Por favor, completa todos los campos.";
     return;
   }
 
   // Validación básica email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    formMessage.textContent = "Por favor, ingresa un correo válido.";
+    formMessage.textContent = "⚠️ Ingresa un correo válido.";
     return;
   }
 
-  formMessage.style.color = "#4CAF50";
-  formMessage.textContent = "¡Mensaje enviado con éxito!";
-
-  // Resetear formulario
-  form.reset();
+  // Enviar datos al Google Sheet con JSON
+  fetch(scriptURL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" }, // 👈 añadido
+    body: JSON.stringify({ nombre, email, mensaje }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        formMessage.style.color = "#4CAF50";
+        formMessage.textContent = "✅ Mensaje enviado con éxito!";
+        form.reset();
+      } else {
+        throw new Error("Error en la respuesta del servidor");
+      }
+    })
+    .catch((error) => {
+      formMessage.style.color = "red";
+      formMessage.textContent =
+        "❌ Error al enviar. Intente nuevamente más tarde.";
+      console.error("Error:", error);
+    });
 
   // Limpiar mensaje después de 4 segundos
   setTimeout(() => {
