@@ -1,7 +1,6 @@
-<script>
 const form = document.getElementById("formulario");
 const mensaje = document.getElementById("form-message");
-const scriptURL = "AQUI_VA_LA_URL_DE_TU_WEB_APP";
+const scriptURL = "https://script.google.com/macros/s/AKfycbyby_MVsMGeiDYHDyqUcU9bVMQzNnSFiiGtw4l4iF0L-iypPdAJW_ulmCbm4CaTJSUYEg/exec";
 
 form.addEventListener("submit", e => {
   e.preventDefault();
@@ -31,5 +30,3 @@ form.addEventListener("submit", e => {
     mensaje.textContent = "Error al enviar: " + err;
   });
 });
-</script>
-
