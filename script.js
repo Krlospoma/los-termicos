@@ -1,5 +1,6 @@
+<script>
 // =====================
-// Animar secciones al hacer scroll usando Intersection Observer
+// Animaciones de secciones
 // =====================
 const observerOptions = { threshold: 0.1 };
 
@@ -24,8 +25,7 @@ const form = document.getElementById("formulario");
 const formMessage = document.getElementById("form-message");
 
 // URL de tu Apps Script
-const scriptURL =
-  "https://script.google.com/macros/s/AKfycbyby_MVsMGeiDYHDyqUcU9bVMQzNnSFiiGtw4l4iF0L-iypPdAJW_ulmCbm4CaTJSUYEg/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbyby_MVsMGeiDYHDyqUcU9bVMQzNnSFiiGtw4l4iF0L-iypPdAJW_ulmCbm4CaTJSUYEg/exec";
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -48,32 +48,37 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  // Enviar datos al Google Sheet con JSON
+  // Desactivar botón para evitar múltiples envíos
+  const btn = form.querySelector("button[type=submit]");
+  btn.disabled = true;
+
   fetch(scriptURL, {
     method: "POST",
+    mode: "cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nombre, email, mensaje }),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "success") {
-        formMessage.style.color = "#4CAF50";
-        formMessage.textContent = "✅ Mensaje enviado con éxito!";
-        form.reset();
-      } else {
-        throw new Error(data.message || "Error en el servidor");
-      }
-    })
-    .catch((error) => {
-      formMessage.style.color = "red";
-      formMessage.textContent =
-        "❌ Error al enviar. Intente nuevamente más tarde.";
-      console.error("Error:", error);
-    });
-
-  // Limpiar mensaje después de 4 segundos
-  setTimeout(() => {
-    formMessage.textContent = "";
-    formMessage.style.color = "#ff7e00";
-  }, 4000);
+  .then((response) => response.json())
+  .then((data) => {
+    if (data.status === "success") {
+      formMessage.style.color = "#4CAF50";
+      formMessage.textContent = "✅ Mensaje enviado con éxito!";
+      form.reset();
+    } else {
+      throw new Error(data.message || "Error en el servidor");
+    }
+  })
+  .catch((error) => {
+    formMessage.style.color = "red";
+    formMessage.textContent = "❌ Error al enviar. Intente nuevamente más tarde.";
+    console.error("Error:", error);
+  })
+  .finally(() => {
+    btn.disabled = false;
+    setTimeout(() => {
+      formMessage.textContent = "";
+      formMessage.style.color = "#ff7e00";
+    }, 4000);
+  });
 });
+</script>
