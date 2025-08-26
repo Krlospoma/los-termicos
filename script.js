@@ -46,9 +46,10 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  // Enviar datos al Google Sheet
+  // Enviar datos al Google Sheet con JSON
   fetch(scriptURL, {
     method: "POST",
+    headers: { "Content-Type": "application/json" }, // 👈 añadido
     body: JSON.stringify({ nombre, email, mensaje }),
   })
     .then((response) => {
