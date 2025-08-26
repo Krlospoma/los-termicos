@@ -25,7 +25,7 @@ const formMessage = document.getElementById("form-message");
 
 // Tu URL del Apps Script (el que me pasaste)
 const scriptURL =
-  "https://script.google.com/macros/s/AKfycbybzyPiwxiu9gKtXoBVjvi2gjjerDoGElXHF7UuQ85RtGPYoEyh0OzJ7bqI25QiiY0k/exec";
+  "https://script.google.com/macros/s/AKfycbxILcaPlTkwgYG-skx7zRUNxhwXEkPBUEwX2_4pE47s50jI9FtbovfAhHl7fKk5Tq5Btw/exec";
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
