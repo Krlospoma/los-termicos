@@ -1,7 +1,7 @@
+// =====================
 // Animar secciones al hacer scroll usando Intersection Observer
-const observerOptions = {
-  threshold: 0.1,
-};
+// =====================
+const observerOptions = { threshold: 0.1 };
 
 const observer = new IntersectionObserver((entries, obs) => {
   entries.forEach((entry) => {
@@ -23,7 +23,7 @@ document.querySelectorAll(".fade-up, .fade-in").forEach((el) => {
 const form = document.getElementById("formulario");
 const formMessage = document.getElementById("form-message");
 
-// Tu URL del Apps Script (el que me pasaste)
+// URL de tu Apps Script
 const scriptURL =
   "https://script.google.com/macros/s/AKfycbxILcaPlTkwgYG-skx7zRUNxhwXEkPBUEwX2_4pE47s50jI9FtbovfAhHl7fKk5Tq5Btw/exec";
 
@@ -35,13 +35,15 @@ form.addEventListener("submit", (e) => {
   const mensaje = form.mensaje.value.trim();
 
   if (!nombre || !email || !mensaje) {
+    formMessage.style.color = "#ff7e00";
     formMessage.textContent = "⚠️ Por favor, completa todos los campos.";
     return;
   }
 
-  // Validación básica email
+  // Validación básica de email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
+    formMessage.style.color = "#ff7e00";
     formMessage.textContent = "⚠️ Ingresa un correo válido.";
     return;
   }
@@ -49,16 +51,17 @@ form.addEventListener("submit", (e) => {
   // Enviar datos al Google Sheet con JSON
   fetch(scriptURL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" }, // 👈 añadido
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nombre, email, mensaje }),
   })
-    .then((response) => {
-      if (response.ok) {
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "success") {
         formMessage.style.color = "#4CAF50";
         formMessage.textContent = "✅ Mensaje enviado con éxito!";
         form.reset();
       } else {
-        throw new Error("Error en la respuesta del servidor");
+        throw new Error(data.message || "Error en el servidor");
       }
     })
     .catch((error) => {
@@ -74,3 +77,4 @@ form.addEventListener("submit", (e) => {
     formMessage.style.color = "#ff7e00";
   }, 4000);
 });
+
