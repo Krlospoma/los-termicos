@@ -1,7 +1,10 @@
 // Animar secciones al hacer scroll usando Intersection Observer
-const observerOptions = { threshold: 0.1 };
+const observerOptions = {
+  threshold: 0.1,
+};
+
 const observer = new IntersectionObserver((entries, obs) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.style.animationPlayState = "running";
       obs.unobserve(entry.target);
@@ -9,7 +12,7 @@ const observer = new IntersectionObserver((entries, obs) => {
   });
 }, observerOptions);
 
-document.querySelectorAll(".fade-up, .fade-in").forEach(el => {
+document.querySelectorAll(".fade-up, .fade-in").forEach((el) => {
   el.style.animationPlayState = "paused";
   observer.observe(el);
 });
@@ -20,8 +23,9 @@ document.querySelectorAll(".fade-up, .fade-in").forEach(el => {
 const form = document.getElementById("formulario");
 const formMessage = document.getElementById("form-message");
 
-// URL de tu Web App desplegado en Google Apps Script
-const scriptURL = "https://script.google.com/macros/s/AKfycbxILcaPlTkwgYG-skx7zRUNxhwXEkPBUEwX2_4pE47s50jI9FtbovfAhHl7fKk5Tq5Btw/exec";
+// Tu URL del Apps Script (el que me pasaste)
+const scriptURL =
+  "https://script.google.com/macros/s/AKfycbxZSIwfO-QLUUXRcbH0BJ9RV-YSJB8uB9KOkhJg2vcM5c-q0XL0yhY1jtURKdUbhltv/exec";
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -35,32 +39,32 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  // Validación básica de email
+  // Validación básica email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     formMessage.textContent = "⚠️ Ingresa un correo válido.";
     return;
   }
 
-  // Enviar datos al Google Sheet
+  // Enviar datos al Google Sheet con JSON
   fetch(scriptURL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" }, // 👈 añadido
     body: JSON.stringify({ nombre, email, mensaje }),
   })
-    .then(response => response.json())
-    .then(data => {
-      if (data.result === "success") {
+    .then((response) => {
+      if (response.ok) {
         formMessage.style.color = "#4CAF50";
         formMessage.textContent = "✅ Mensaje enviado con éxito!";
         form.reset();
       } else {
-        throw new Error(data.message);
+        throw new Error("Error en la respuesta del servidor");
       }
     })
-    .catch(error => {
+    .catch((error) => {
       formMessage.style.color = "red";
-      formMessage.textContent = "❌ Error al enviar. Intente nuevamente más tarde.";
+      formMessage.textContent =
+        "❌ Error al enviar. Intente nuevamente más tarde.";
       console.error("Error:", error);
     });
 
@@ -70,4 +74,3 @@ form.addEventListener("submit", (e) => {
     formMessage.style.color = "#ff7e00";
   }, 4000);
 });
-
