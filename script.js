@@ -23,7 +23,7 @@ document.querySelectorAll(".fade-up, .fade-in").forEach((el) => {
 const form = document.getElementById("formulario");
 const formMessage = document.getElementById("form-message");
 
-// Reemplaza por la URL de tu Web App desplegado
+// Tu URL del Apps Script desplegado
 const scriptURL = "https://script.google.com/macros/s/AKfycbxILcaPlTkwgYG-skx7zRUNxhwXEkPBUEwX2_4pE47s50jI9FtbovfAhHl7fKk5Tq5Btw/exec";
 
 form.addEventListener("submit", (e) => {
@@ -38,35 +38,46 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
+  // Validación básica de email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     formMessage.textContent = "⚠️ Ingresa un correo válido.";
     return;
   }
 
+  // Enviar datos al Google Sheet
   fetch(scriptURL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nombre, email, mensaje }),
   })
-    .then(response => response.json())
-    .then(data => {
+    .then(response => response.text()) // Usar text() para evitar errores JSON
+    .then(text => {
+      let data;
+      try {
+        data = JSON.parse(text); // Intentar parsear
+      } catch {
+        throw new Error("Error al procesar la respuesta del servidor");
+      }
+
       if (data.result === "success") {
         formMessage.style.color = "#4CAF50";
         formMessage.textContent = "✅ Mensaje enviado con éxito!";
         form.reset();
       } else {
-        throw new Error(data.message);
+        throw new Error(data.message || "Error desconocido");
       }
     })
-    .catch(error => {
+    .catch((error) => {
       formMessage.style.color = "red";
       formMessage.textContent = "❌ Error al enviar. Intente nuevamente más tarde.";
       console.error("Error:", error);
     });
 
+  // Limpiar mensaje después de 4 segundos
   setTimeout(() => {
     formMessage.textContent = "";
     formMessage.style.color = "#ff7e00";
   }, 4000);
 });
+
